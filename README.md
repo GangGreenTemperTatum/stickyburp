@@ -1,17 +1,11 @@
 # stickyburp
 
-("`Sticky Burp, Reusable and Replacable Environment Variables`").. No more `notes.txt`! 🤙
-
-A Burp Suite extension written in Kotlin that allows you to create and manage "stickies" (aka Environment Variables) from selected text across different Burp Suite panels. Think of this extension as the same functionality you get in an API testing and development tool to store variables with raw values that can be used across different views.
-
-<br clear="left"/>
-
 <div align="center">
 
 <img src="public/images/stickyburp.png" width="200" height="200" align="center" style="margin-right: 12px"/>
 
-<br>
-<br>
+_Sticky Burp, Reusable and Replacable Environment Variables_
+.. Use native burp notes, no more `notes.txt`! 🤙
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/GangGreenTemperTatum/stickyburp)](https://github.com/GangGreenTemperTatum/stickyburp/releases)
 [![GitHub stars](https://img.shields.io/github/stars/GangGreenTemperTatum/stickyburp?style=social)](https://github.com/GangGreenTemperTatum/stickyburp/stargazers)
@@ -24,9 +18,31 @@ A Burp Suite extension written in Kotlin that allows you to create and manage "s
 > **Note**
 > BApp Store submission is currently in progress. Once approved, the extension will be available directly through Burp Suite's BApp Store.
 
+<br>
+<br>
+
 </div>
 
+StickyBurp is a Burp Suite extension that allows you to create and manage "stickies" (aka Global per-project Environment Variables) from highlighted/selected text across different Burp Suite tabs (think of this extension as the same functionality you get in an API testing and development tool to store variables with raw values that can be used across different views).
+
+This functionality gives you the power to easily store variables in a table and then replace existing payload contents with these variables (ie, in the Repeater or Intruder tab). Common example use-cases for storing and replacing are:
+
+- Exploit Server URL / Collaborator URL
+- Authentication tokens/cookies (ie similar to manually testing autorize)
+- UUIDs, user accounts, emails/PII etc.
+- Dynamically created content from an application's response
+
+Simply highlight the payload content, right-click and either add, update or replace: (_skip to the [demo](./README.md#demo) usage_)
+
+![stickyburp intro](public/images/stickyburp-intro-readme-usage.png)
+*stickyburp simple use-case!*
+
+---
+
+# ToC
+
 - [stickyburp](#stickyburp)
+- [ToC](#toc)
   - [Features](#features)
   - [Demo](#demo)
   - [Screenshots](#screenshots)
@@ -47,14 +63,12 @@ A Burp Suite extension written in Kotlin that allows you to create and manage "s
 ## Features
 
 - **Sticky Management**
-  - Create and store stickies from any selected text in Burp Suite
-  - Stickies store name, value, and source information
+  - Create and store stickies (AKA global environment variables) from any selected text in Burp Suite request/response panes
+  - Stickies store name, value, source information and your own notes
   - Replace the values in Repeater tab with the raw value of the previously saved sticky
-  - Update existing stickies with new values and add your own notes
   - Copy stickies values to clipboard with right-click
   - Stickies can be colored for easier visibility and are by default colored
   - Stickies are persisted across projects even when burp is quit and reopened
-  - Sort and order your stickies using the row sorting functionality
 
 - **Context Menu Integration**
   - Right-click selected text to create new stickies
@@ -64,16 +78,7 @@ A Burp Suite extension written in Kotlin that allows you to create and manage "s
 
 - **Dedicated UI Tab**
   - Table view of all stored stickies
-  - Shows stickies name, value, and source
-  - Manual add/update functionality
-  - Right-click menu for copying values
-  - Visual feedback for all operations
-
-- **Data Persistence**
-  - Stickies maintained throughout Burp Suite session and in project after quitting Burp
-  - Easy to update and manage values
-  - Protection against duplicate stickies names
-  - Validation to prevent empty values
+  - Shows stickies name, value, source and your notes
 
 - **Hotkeys/Shortcuts** (**No more clicks!**)
   - Automatically switch to the StickyBurp tab using "`CMD`"("`Control`" for Windows users)+"`Shift`"+"`S`"
