@@ -6,18 +6,7 @@ import burp.api.montoya.core.ToolType
 
 class StickyBurpHttpHandler(private val tab: StickyBurpTab) : HttpHandler {
     override fun handleHttpRequestToBeSent(requestToBeSent: HttpRequestToBeSent): RequestToBeSentAction {
-        if (requestToBeSent.toolSource().toolType() !in listOf(
-                ToolType.PROXY,
-                ToolType.REPEATER,
-                ToolType.INTRUDER,
-                ToolType.TARGET,
-                ToolType.SCANNER,
-                ToolType.LOGGER
-            )
-        ) {
-            return RequestToBeSentAction.continueWith(requestToBeSent)
-        }
-
+        val toolType = requestToBeSent.toolSource().toolType()
         var modifiedRequest = requestToBeSent.toString()
 
         for (variable in tab.getVariables()) {
