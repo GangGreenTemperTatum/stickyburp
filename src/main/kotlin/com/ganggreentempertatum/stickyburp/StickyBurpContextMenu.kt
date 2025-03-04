@@ -19,28 +19,56 @@ import burp.api.montoya.http.HttpService
 
 class StickyBurpContextMenu(private val tab: StickyBurpTab, private val logging: Logging) : ContextMenuItemsProvider {
     override fun provideMenuItems(event: ContextMenuEvent): List<JMenuItem> {
-        val messageEditor = event.messageEditorRequestResponse()
-        if (!messageEditor.isPresent) return emptyList()
-
-        val editor = messageEditor.get()
-        val selection = editor.selectionOffsets()
-        if (!selection.isPresent) return emptyList()
-
-        val selectedText = if (event.isFrom(InvocationType.MESSAGE_EDITOR_REQUEST, InvocationType.MESSAGE_VIEWER_REQUEST)) {
-            val request = editor.requestResponse().request()
-            val range = selection.get()
-            request.toByteArray().subArray(range).toString()
-        } else {
-            val response = editor.requestResponse().response()
-            val range = selection.get()
-            response.toByteArray().subArray(range).toString()
+        // Get selected text based on context
+        val selectedText = when {
+            event.messageEditorRequestResponse().isPresent -> {
+                // Standard message editor handling
+                val editor = event.messageEditorRequestResponse().get()
+                editor.selectionOffsets()
+                    .map { selection ->
+                        editor.requestResponse().request().toByteArray()
+                            .subArray(selection)
+                            .toString()
+                    }
+                    .orElse(null)
+            }
+            event.invocationType() == InvocationType.INTRUDER_PAYLOAD_POSITIONS -> {
+                logging.logToOutput("Processing Intruder selection")
+                // Special handling for Intruder context
+                when {
+                    // Check if we have a message editor with selection
+                    event.messageEditorRequestResponse().isPresent -> {
+                        val editor = event.messageEditorRequestResponse().get()
+                        editor.selectionOffsets()
+                            .map { selection ->
+                                editor.requestResponse().request().toByteArray()
+                                    .subArray(selection)
+                                    .toString()
+                                    .also { logging.logToOutput("Found Intruder selection: $it") }
+                            }
+                            .orElse(null)
+                    }
+                    // If not, this might be a payload position marker
+                    else -> {
+                        logging.logToOutput("No direct selection found, checking Intruder context")
+                        // Create sticky for the position marker itself
+                        "§"
+                    }
+                }
+            }
+            else -> null
         }
 
-        if (selectedText.isEmpty()) {
-            logging.logToOutput("No text selected")
+        if (selectedText == null || selectedText.isEmpty()) {
+            logging.logToOutput("""
+                Menu creation skipped:
+                Context: ${event.invocationType()}
+                Is Intruder: ${event.isFromTool(ToolType.INTRUDER)}
+            """.trimIndent())
             return emptyList()
         }
-        logging.logToOutput("Selected text: $selectedText")
+
+        logging.logToOutput("Selected text from ${event.invocationType()}: $selectedText")
 
         val mainMenu = JMenu("StickyBurp")
 
@@ -76,8 +104,8 @@ class StickyBurpContextMenu(private val tab: StickyBurpTab, private val logging:
                 if (update != JOptionPane.YES_OPTION) return@addActionListener
             }
 
-            val source = if (messageEditor.isPresent) {
-                val reqRes = messageEditor.get().requestResponse()
+            val source = if (event.messageEditorRequestResponse().isPresent) {
+                val reqRes = event.messageEditorRequestResponse().get().requestResponse()
                 val tool = when (event.invocationType()) {
                     InvocationType.SITE_MAP_TREE,
                     InvocationType.SITE_MAP_TABLE -> "Target"
@@ -129,7 +157,7 @@ class StickyBurpContextMenu(private val tab: StickyBurpTab, private val logging:
 
                 tab.addVariable(StickyVariable(
                     name = trimmedName,
-                    value = selectedText,
+                    value = selectedText.toString(), // Ensure string type
                     sourceTab = tool,
                     source = source,
                     timestamp = java.time.LocalDateTime.now().toString()
@@ -144,8 +172,8 @@ class StickyBurpContextMenu(private val tab: StickyBurpTab, private val logging:
         tab.getVariables().forEach { variable ->
             val replaceItem = JMenuItem("${variable.name} (${variable.value})")
             replaceItem.addActionListener {
-                val range = selection.get()
-                val reqRes = editor.requestResponse()
+                val range = event.messageEditorRequestResponse().get().selectionOffsets().get()
+                val reqRes = event.messageEditorRequestResponse().get().requestResponse()
 
                 if (event.isFrom(InvocationType.MESSAGE_EDITOR_REQUEST, InvocationType.MESSAGE_VIEWER_REQUEST)) {
                     val request = reqRes.request()
@@ -157,7 +185,7 @@ class StickyBurpContextMenu(private val tab: StickyBurpTab, private val logging:
                             variable.value
                         )
                     )
-                    editor.setRequest(newRequest)
+                    event.messageEditorRequestResponse().get().setRequest(newRequest)
                 } else {
                     val response = reqRes.response()
                     val newResponse = HttpResponse.httpResponse(
@@ -167,7 +195,7 @@ class StickyBurpContextMenu(private val tab: StickyBurpTab, private val logging:
                             variable.value
                         )
                     )
-                    editor.setResponse(newResponse)
+                    event.messageEditorRequestResponse().get().setResponse(newResponse)
                 }
             }
             replaceMenu.add(replaceItem)
