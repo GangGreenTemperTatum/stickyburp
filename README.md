@@ -9,14 +9,14 @@ _Sticky Burp, Reusable and Replacable Environment Variables_
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/GangGreenTemperTatum/stickyburp)](https://github.com/GangGreenTemperTatum/stickyburp/releases)
 [![GitHub stars](https://img.shields.io/github/stars/GangGreenTemperTatum/stickyburp?style=social)](https://github.com/GangGreenTemperTatum/stickyburp/stargazers)
-[![BApp Store](https://img.shields.io/badge/BApp%20Store-Submission%20In%20Progress-yellow)](https://portswigger.net/bappstore)
+[![BApp Store Status](https://img.shields.io/badge/BApp%20Store%20Status-Published!-green?link=https%3A%2F%2Fportswigger.net%2Fbappstore%2Fa1d3ab3c46834b60b8c95ecdb481d8c7)](https://portswigger.net/bappstore/a1d3ab3c46834b60b8c95ecdb481d8c7)
 [![License](https://img.shields.io/github/license/GangGreenTemperTatum/stickyburp?branch=main)](https://github.com/GangGreenTemperTatum/stickyburp/blob/main/LICENSE)
 
 [Report Bug](https://github.com/GangGreenTemperTatum/stickyburp/issues) •
 [Request Feature](https://github.com/GangGreenTemperTatum/stickyburp/issues)
 
 > **Note**
-> BApp Store submission is currently in progress. Once approved, the extension will be available directly through Burp Suite's BApp Store.
+> StickyBurp is now available via the bAPP store! 🥳
 
 <br>
 <br>
@@ -58,6 +58,8 @@ Simply highlight the payload content, right-click and either add, update or repl
     - [Prerequisites](#prerequisites)
     - [Build Steps (from source)](#build-steps-from-source)
   - [Installation / Loading the extension](#installation--loading-the-extension)
+    - [bAPP Store (easiest)](#bapp-store-easiest)
+    - [From Source](#from-source)
   - [Usage](#usage)
   - [Contributing and Supporting](#contributing-and-supporting)
     - [Star History](#star-history)
@@ -150,6 +152,17 @@ build/libs/stickyburp-all.jar
 ---
 
 ## Installation / Loading the extension
+
+### bAPP Store (easiest)
+
+- bAPP Store Entry -> https://portswigger.net/bappstore/a1d3ab3c46834b60b8c95ecdb481d8c7
+- PortSwigger Fork -> https://github.com/portswigger/sticky-burp
+
+<br>
+
+![bAPP Store Install](./public/images/bAPP-store-install.png)
+
+### From Source
 
 1. Open Burp Suite
 2. Go to Extensions tab
