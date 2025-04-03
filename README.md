@@ -91,6 +91,9 @@ Simply highlight the payload content, right-click and either add, update or repl
 
 ## Demo
 
+![stickyburp publishing](./public/burp-publish-example.gif)
+*stickyburp in the ginandjuiceshop! https://x.com/BApp_Store/status/1907776363974590626*
+
 ![stickyburp v1.0.0 in action](public/gifs/stickyburp.gif)
 *stickyburp in action!*
 
