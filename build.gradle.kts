@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     compileOnly("net.portswigger.burp.extensions:montoya-api:2024.12")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 }
 
 tasks.test {
